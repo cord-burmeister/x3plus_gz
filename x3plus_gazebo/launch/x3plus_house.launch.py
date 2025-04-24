@@ -78,19 +78,19 @@ def evaluate_xacro(context, *args, **kwargs):
     mecanum = LaunchConfiguration('mecanum').perform(context)
 
     # Use xacro to process the file
-    xacro_file = os.path.join(get_package_share_directory('master3_description'), 'urdf', 'yahboomcar_X3.urdf.xacro')
+    xacro_file = os.path.join(get_package_share_directory('x3plus_description'), 'urdf', 'yahboomcar_X3plusX.urdf.xacro')
 
     #robot_description_config = xacro.process_file(xacro_file)
     robot_description_config = xacro.process_file(xacro_file, 
             mappings={  
-                "mecanum": mecanum
+#                "mecanum": mecanum
                 }).toxml()
 
     robot_state_publisher_node = Node(
       package='robot_state_publisher',
       executable='robot_state_publisher',
       name='robot_state_publisher',
-        output='both',
+      output='both',
       parameters=[{
         'robot_description': robot_description_config
       }])
@@ -121,9 +121,8 @@ def generate_launch_description():
     )
 
     # Setup project paths
-    pkg_project_bringup = get_package_share_directory('master3_bringup')
-    pkg_project_gazebo = get_package_share_directory('master3_gazebo')
-    pkg_project_description = get_package_share_directory('master3_description')
+    pkg_project_gazebo = get_package_share_directory('x3plus_gazebo')
+    pkg_project_description = get_package_share_directory('x3plus_description')
     package_dir = get_package_share_directory('aws_robomaker_small_house_world')
     # pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
@@ -169,7 +168,7 @@ def generate_launch_description():
     rviz = Node(
        package='rviz2',
        executable='rviz2',
-       arguments=['-d', os.path.join(pkg_project_bringup, 'config', 'master3_house.rviz')],
+       arguments=['-d', os.path.join(pkg_project_gazebo, 'config', 'x3plus_house.rviz')],
        condition=IfCondition(LaunchConfiguration('rviz'))
     )
 
@@ -178,7 +177,7 @@ def generate_launch_description():
         package='ros_gz_bridge',
         executable='parameter_bridge',
         parameters=[{
-            'config_file': os.path.join(pkg_project_bringup, 'config', 'master3_bridge.yaml'),
+            'config_file': os.path.join(pkg_project_gazebo, 'config', 'x3plus_bridge.yaml'),
             'qos_overrides./tf_static.publisher.durability': 'transient_local',
         }],
         output='screen'
