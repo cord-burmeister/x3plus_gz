@@ -9,7 +9,7 @@
 -->
 
 <sdf version="1.8">
-  <world name="demo">
+  <world name="default">
     <plugin
       filename="gz-sim-physics-system"
       name="gz::sim::systems::Physics">
