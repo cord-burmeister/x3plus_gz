@@ -142,7 +142,7 @@ def generate_launch_description():
         executable="create",
         arguments=[
             "-name",
-            "master3_drive",
+            "x3plus_bot",
             "-allow_renaming",
             "false",
             "-topic",
