@@ -220,7 +220,6 @@ def generate_launch_description():
         output='screen'
     )
 
-
     gz_spawn_entity = Node(
         package="ros_gz_sim",
         executable="create",
@@ -247,7 +246,6 @@ def generate_launch_description():
         output="screen",
         namespace="",
     )
-
 
     x3plus_bringup_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
