@@ -144,20 +144,20 @@ def generate_launch_description():
     #     default_value=os.path.join(pkg_home, 'config', 'nav2_params-DWBLocalPlanner.yaml'),
     #     description='Full path to the ROS2 parameters file to use for all launched nodes')
 
-    # declare_params_file_cmd = DeclareLaunchArgument(
-    #     'params_file',
-    #     default_value=os.path.join(pkg_home, 'config', 'nav2_params.yaml'),
-    #     description='Full path to the ROS2 parameters file to use for all launched nodes')
+    declare_params_file_cmd = DeclareLaunchArgument(
+        'params_file',
+        default_value=os.path.join(pkg_home, 'config', 'nav2_params.yaml'),
+        description='Full path to the ROS2 parameters file to use for all launched nodes')
 
     # declare_params_file_cmd = DeclareLaunchArgument(
     #     'params_file',
     #     default_value=os.path.join(pkg_home, 'config', 'nav2_params-SmacStateLattice.yaml'),
     #     description='Full path to the ROS2 parameters file to use for all launched nodes')
 
-    declare_params_file_cmd = DeclareLaunchArgument(
-        'params_file',
-        default_value=os.path.join(pkg_home, 'config', 'nav2_params-MPPIController.yaml'),
-        description='Full path to the ROS2 parameters file to use for all launched nodes')
+    # declare_params_file_cmd = DeclareLaunchArgument(
+    #     'params_file',
+    #     default_value=os.path.join(pkg_home, 'config', 'nav2_params-MPPIController.yaml'),
+    #     description='Full path to the ROS2 parameters file to use for all launched nodes')
 
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart', default_value='true',
