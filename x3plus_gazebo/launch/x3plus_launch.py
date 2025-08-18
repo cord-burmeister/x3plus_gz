@@ -82,6 +82,7 @@ def generate_launch_description():
     use_respawn = LaunchConfiguration('use_respawn')
     # args that can be set from the command line or a default will be used
     mecanum_launch_value = LaunchConfiguration('mecanum')
+    use_nav2 = LaunchConfiguration('use_nav2')
 #endregion
 
 #region  Launch configuration variables specific to simulation
@@ -206,6 +207,12 @@ def generate_launch_description():
         default_value=os.path.join(world_package, 'maps', 'map.yaml'),
         description='Full path to the ROS2 map file to use for navigation')
 
+    declare_use_nav2_cmd = DeclareLaunchArgument(
+        'use_nav2',
+        default_value='True',
+        description='Whether to start the x3plus logic')
+
+
 #endregion
 
 
@@ -257,6 +264,7 @@ def generate_launch_description():
                           'params_file': params_file,
                           'autostart': autostart,
                           'use_composition': use_composition,
+                          'use_nav2': use_nav2,
                           'use_respawn': use_respawn}.items())
 
     # Create the launch description and populate
@@ -280,6 +288,7 @@ def generate_launch_description():
     ld.add_action(declare_world_cmd)
     ld.add_action(declare_map_cmd)
     ld.add_action(declare_use_respawn_cmd)
+    ld.add_action(declare_use_nav2_cmd)
 
     # Add any simulation  actions
     ld.add_action(OpaqueFunction(function=launch_setup))
