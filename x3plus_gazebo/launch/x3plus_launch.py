@@ -259,12 +259,13 @@ def generate_launch_description():
             os.path.join(bringup_launch_dir, 'bringup_launch.py')),
         launch_arguments={'namespace': namespace,
                           'use_namespace': use_namespace,
+                          'slam': slam,
                           'map': map_yaml_file,
                           'use_sim_time': use_sim_time,
                           'params_file': params_file,
                           'autostart': autostart,
-                          'use_composition': use_composition,
                           'use_nav2': use_nav2,
+                          'use_composition': use_composition,
                           'use_respawn': use_respawn}.items())
 
     # Create the launch description and populate
