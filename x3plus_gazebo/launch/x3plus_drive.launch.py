@@ -19,7 +19,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch.substitutions import (
@@ -42,7 +42,7 @@ def evaluate_xacro(context, *args, **kwargs):
     mecanum = LaunchConfiguration('mecanum').perform(context)
 
     # Use xacro to process the file
-    xacro_file = os.path.join(get_package_share_directory('master3_description'), 'urdf', 'yahboomcar_X3.urdf.xacro')
+    xacro_file = os.path.join(get_package_share_directory('x3plus_description'), 'urdf', 'yahboomcar_X3plusX.urdf.xacro')
 
     #robot_description_config = xacro.process_file(xacro_file)
     robot_description_config = xacro.process_file(xacro_file, 
@@ -72,9 +72,8 @@ def generate_launch_description():
     namespace = ''
 
     # Setup project paths
-    pkg_project_bringup = get_package_share_directory('master3_bringup')
-    pkg_project_gazebo = get_package_share_directory('master3_gazebo')
-    pkg_project_description = get_package_share_directory('master3_description')
+    pkg_project_gazebo = get_package_share_directory('x3plus_gazebo')
+    pkg_project_description = get_package_share_directory('x3plus_description')
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
     # Setup to launch the simulator and Gazebo world
@@ -84,7 +83,7 @@ def generate_launch_description():
             launch_arguments={'gz_args': PathJoinSubstitution([
             pkg_project_gazebo,
             'worlds',
-            'master3_empty.sdf'
+            'empty.sdf'
         ])}.items(),
     )
 
@@ -93,7 +92,7 @@ def generate_launch_description():
         executable="create",
         arguments=[
             "-name",
-            "master3_drive",
+            "x3plus_bot",
             "-allow_renaming",
             "false",
             "-topic",
@@ -115,11 +114,27 @@ def generate_launch_description():
         namespace="",
     )
 
+
+    # gui_arg = DeclareLaunchArgument(name='gui', default_value='true', choices=['true', 'false'],
+    #                                 description='Flag to enable joint_state_publisher_gui')
+    
+    # # Depending on gui parameter, either launch joint_state_publisher or joint_state_publisher_gui
+    # joint_state_publisher_node = Node(
+    #     package='joint_state_publisher',
+    #     executable='joint_state_publisher',
+    #     condition=UnlessCondition(LaunchConfiguration('gui'))
+    # )
+
+    # joint_state_publisher_gui_node = Node(
+    #     package='joint_state_publisher_gui',
+    #     executable='joint_state_publisher_gui',
+    #     condition=IfCondition(LaunchConfiguration('gui'))
+    # )
     # Visualize in RViz
     rviz = Node(
        package='rviz2',
        executable='rviz2',
-       arguments=['-d', os.path.join(pkg_project_bringup, 'config', 'master3_drive.rviz')],
+       arguments=['-d', os.path.join(pkg_project_gazebo, 'config', 'x3plus_drive.rviz')],
        condition=IfCondition(LaunchConfiguration('rviz'))
     )
 
@@ -128,7 +143,7 @@ def generate_launch_description():
         package='ros_gz_bridge',
         executable='parameter_bridge',
         parameters=[{
-            'config_file': os.path.join(pkg_project_bringup, 'config', 'master3_bridge.yaml'),
+            'config_file': os.path.join(pkg_project_gazebo, 'config', 'x3plus_bridge.yaml'),
             'qos_overrides./tf_static.publisher.durability': 'transient_local',
         }],
         output='screen'
@@ -141,6 +156,8 @@ def generate_launch_description():
                                description='Open RViz.'),
         gz_spawn_entity,
         bridge,
+        # joint_state_publisher_gui_node,
+        # joint_state_publisher_node,
         # add OpaqueFunction to evaluate xacro file in context and pass to any nodes that need it
         OpaqueFunction(function=evaluate_xacro),
         rviz
