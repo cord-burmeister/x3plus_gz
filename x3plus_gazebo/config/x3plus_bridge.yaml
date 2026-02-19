@@ -89,6 +89,16 @@
   ros_type_name: "sensor_msgs/msg/BatteryState"
   gz_type_name: "gz.msgs.BatteryState"
   direction: "GZ_TO_ROS"
+- ros_topic_name: "/model/x3plus_bot/joint/arm_joint1/cmd_pos"
+  gz_topic_name: "/model/x3plus_bot/joint/arm_joint1/0/cmd_pos"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: "ROS_TO_GZ"
+- ros_topic_name: "/model/x3plus_bot/joint/arm_joint2/cmd_pos"
+  gz_topic_name: "/model/x3plus_bot/joint/arm_joint2/0/cmd_pos"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: "ROS_TO_GZ"
 
 
 

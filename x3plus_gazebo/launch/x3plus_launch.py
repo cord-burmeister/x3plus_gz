@@ -227,6 +227,12 @@ def generate_launch_description():
         output='screen'
     )
 
+    pt_joint_bridge_cmd = Node(
+        package='x3plus_gazebo',
+        executable='pt_joint_command_bridge',
+        output='screen'
+    )
+
     gz_spawn_entity = Node(
         package="ros_gz_sim",
         executable="create",
@@ -295,6 +301,7 @@ def generate_launch_description():
     ld.add_action(OpaqueFunction(function=launch_setup))
     ld.add_action(gz_spawn_entity)
     ld.add_action(bridge_cmd)
+    ld.add_action(pt_joint_bridge_cmd)
 
     # Add the actions to launch all of the navigation nodes
     # ld.add_action(start_robot_state_publisher_cmd)

@@ -9,6 +9,8 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
   <depend>x3plus_description</depend>
 	
   <!-- It is also good practice to add a dependency to ros2launch to the package.xml file of your package: -->

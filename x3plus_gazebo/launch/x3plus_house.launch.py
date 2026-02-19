@@ -183,6 +183,12 @@ def generate_launch_description():
         output='screen'
     )
 
+    pt_joint_bridge = Node(
+        package='x3plus_gazebo',
+        executable='pt_joint_command_bridge',
+        output='screen'
+    )
+
     return LaunchDescription([
         mecanum_launch_arg,
         declare_world_arg,
@@ -192,6 +198,7 @@ def generate_launch_description():
                                description='Open RViz.'),
         gz_spawn_entity,
         bridge,
+        pt_joint_bridge,
         # add OpaqueFunction to evaluate xacro file in context and pass to any nodes that need it
         OpaqueFunction(function=evaluate_xacro),
         rviz
