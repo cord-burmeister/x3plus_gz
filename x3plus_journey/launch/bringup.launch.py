@@ -39,6 +39,21 @@ DEFAULT_WORLD = ("willowgarage", "willowgarage.world")
 def derive_configs(context, pkg_share, *args, **kwargs):
 	use_case = LaunchConfiguration("use_case").perform(context)
 	slam = LaunchConfiguration("slam").perform(context)
+	use_sim_time = LaunchConfiguration("use_sim_time").perform(context)
+	mode = LaunchConfiguration("mode").perform(context)
+
+
+	if (mode == "companion"):
+		use_sim_time = "false"
+	elif (mode == "simulation"):
+		use_sim_time = "true"
+	elif (mode == "hil"):
+		use_sim_time = "false"
+	elif (mode == "robot"):
+		use_sim_time = "false"
+	else:
+		raise ValueError(f"Unsupported mode '{mode}'")
+
 	if use_case == "drive":
 		rviz_name = "nav_footprint.rviz"
 	elif use_case == "slam":
@@ -61,7 +76,7 @@ def derive_configs(context, pkg_share, *args, **kwargs):
 		raise ValueError(f"Unsupported use_case '{use_case}'")
 	pkg_share_path = pkg_share.perform(context)  # because pkg_share is FindPackageShare(...)
 	rviz_path = os.path.join(pkg_share_path, "rviz", rviz_name)
-	return [SetLaunchConfiguration("rviz_config_file", rviz_path), SetLaunchConfiguration("slam", slam)]
+	return [SetLaunchConfiguration("rviz_config_file", rviz_path), SetLaunchConfiguration("slam", slam), SetLaunchConfiguration("use_sim_time", use_sim_time)]
 
 
 def validate_enum_arg(context, name, valid):
@@ -103,6 +118,7 @@ def generate_launch_description() -> LaunchDescription:
 	use_sim_time = LaunchConfiguration("use_sim_time")
 	robot_name = LaunchConfiguration("robot_name")
 	mode = LaunchConfiguration("mode")
+	slam = LaunchConfiguration("slam")
 	use_case = LaunchConfiguration("use_case")
 	use_ui = LaunchConfiguration("use_ui")
 	use_bridge = LaunchConfiguration("use_bridge")
@@ -110,6 +126,14 @@ def generate_launch_description() -> LaunchDescription:
 	explore_config_file = LaunchConfiguration("explore_config_file")
 	roadmap_explore_config_file = LaunchConfiguration('roadmap_explore_config_file')
 	frontier_explore_config_file = LaunchConfiguration('frontier_explore_config_file')
+	visualize = LaunchConfiguration("visualize")
+	use_nav2 = LaunchConfiguration("use_nav2")
+	map = LaunchConfiguration("map")
+	params_file = LaunchConfiguration("params_file")
+	autostart = LaunchConfiguration("autostart")
+	use_composition = LaunchConfiguration("use_composition")
+	use_respawn = LaunchConfiguration("use_respawn")
+
 
 
 	pkg_share = FindPackageShare("x3plus_journey")
