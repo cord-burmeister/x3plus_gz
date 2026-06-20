@@ -42,7 +42,6 @@ def derive_configs(context, pkg_share, *args, **kwargs):
 	use_sim_time = LaunchConfiguration("use_sim_time").perform(context)
 	mode = LaunchConfiguration("mode").perform(context)
 
-
 	if (mode == "companion"):
 		use_sim_time = "false"
 	elif (mode == "simulation"):
@@ -133,6 +132,7 @@ def generate_launch_description() -> LaunchDescription:
 	autostart = LaunchConfiguration("autostart")
 	use_composition = LaunchConfiguration("use_composition")
 	use_respawn = LaunchConfiguration("use_respawn")
+	use_localization = LaunchConfiguration("use_localization")
 
 
 
@@ -172,8 +172,13 @@ def generate_launch_description() -> LaunchDescription:
 		DeclareLaunchArgument(
 			"use_bridge",
 			default_value="bridge",
-			description="Whether to use a bridge to connect clients: none, bridge, foxglove.",
+			description="Whether to use a bridge to connect clients: none, bridge, foxglove, foxglove-remote.",
 		),
+    DeclareLaunchArgument(
+			"use_localization",
+			default_value="ground-truth",
+			description="Which localization to use: ground-truth, wheel."),
+
 		DeclareLaunchArgument(
 			"robot_name",
 			default_value="x3plus_bot",
@@ -251,6 +256,7 @@ def generate_launch_description() -> LaunchDescription:
 		LogInfo(msg=["Starting bring up for robot: ", robot_name]),
 		LogInfo(msg=[msg]),
 		LogInfo(msg=["Selected default world for host ", hostname, ": ", world_name]),
+		LogInfo(msg=["Selected localization for : ",  LaunchConfiguration("use_localization")]),
 
 		#region Validation of enum arguments
 		OpaqueFunction(
@@ -278,9 +284,17 @@ def generate_launch_description() -> LaunchDescription:
             function=lambda context: validate_enum_arg(
                 context,
                 'use_bridge',
-                ['none', 'bridge', 'foxglove']
+                ['none', 'bridge', 'foxglove', 'foxglove-remote']
             )
         ),
+		OpaqueFunction(
+            function=lambda context: validate_enum_arg(
+                context,
+                'use_localization',
+                ['ground-truth', 'wheel']
+            )
+        ),
+
 		# endregion
 
 	    OpaqueFunction(
@@ -350,6 +364,7 @@ def generate_launch_description() -> LaunchDescription:
 				"autostart": LaunchConfiguration("autostart"),
 				"use_composition": LaunchConfiguration("use_composition"),
 				"use_respawn": LaunchConfiguration("use_respawn"),
+				"use_localization": LaunchConfiguration("use_localization"),
 
 			}.items(),
 			condition=IfCondition(
@@ -391,6 +406,21 @@ def generate_launch_description() -> LaunchDescription:
 			#}.items(),
 			condition=IfCondition(
 				PythonExpression(["'", use_bridge, "' == 'foxglove'"])
+			),
+		),
+		IncludeLaunchDescription(
+			XMLLaunchDescriptionSource(
+				PathJoinSubstitution([
+					FindPackageShare("foxglove_bridge"),
+					"launch",
+					"foxglove_bridge_launch.xml"
+				])
+			),
+			launch_arguments={
+				"remote_access": "true",
+			}.items(),
+			condition=IfCondition(
+				PythonExpression(["'", use_bridge, "' == 'foxglove-remote'"])
 			),
 		),
 
