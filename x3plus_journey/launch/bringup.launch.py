@@ -319,7 +319,7 @@ def generate_launch_description() -> LaunchDescription:
 				"headless": LaunchConfiguration("headless"),
 			}.items(),
 			condition=IfCondition(
-				PythonExpression(["'", mode, "' in ['simulation']"])
+				PythonExpression(["'", mode, "' in ['simulation', 'hil']"])
 			),
 		),
         #endregion
