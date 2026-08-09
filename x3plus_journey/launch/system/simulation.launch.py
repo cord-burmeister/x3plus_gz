@@ -99,7 +99,7 @@ def generate_launch_description():
     robot_sim_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
-                FindPackageShare("x3plus_worlds"),
+                FindPackageShare("x3plus_journey"),
                 "launch",
                 "robots",
                 "x3plus.launch.py",

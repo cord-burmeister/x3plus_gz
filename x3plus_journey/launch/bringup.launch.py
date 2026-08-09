@@ -224,10 +224,10 @@ def generate_launch_description() -> LaunchDescription:
             default_value=PathJoinSubstitution([FindPackageShare('x3plus_nav2'), 'config', 'explore-params.yaml']),
             description='Full path to the Explore Lite config file to use'),
 
-    	DeclareLaunchArgument(
-			'roadmap_explore_config_file',
-			default_value=PathJoinSubstitution([FindPackageShare('roadmap_explorer'), 'params', 'exploration_params.yaml']),
-			description='Full path to the ROS2 parameters file to use for all roadmap exploration nodes'),
+    	# DeclareLaunchArgument(
+		# 	'roadmap_explore_config_file',
+		# 	default_value=PathJoinSubstitution([FindPackageShare('roadmap_explorer'), 'params', 'exploration_params.yaml']),
+		# 	description='Full path to the ROS2 parameters file to use for all roadmap exploration nodes'),
 
     	DeclareLaunchArgument(
 			'frontier_explore_config_file',
